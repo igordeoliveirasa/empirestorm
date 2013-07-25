@@ -1,4 +1,4 @@
-empirestorm
+empirestorm.
 ===========
 
 Empire Storm Game
