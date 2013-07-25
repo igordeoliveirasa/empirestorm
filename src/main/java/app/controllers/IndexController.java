@@ -37,7 +37,7 @@ public class IndexController {
         @Get
         @Path("/")
         public void login() {            
-            result.forwardTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/index"));
+            result.permanentlyRedirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/index"));
         }
         
         @Post
