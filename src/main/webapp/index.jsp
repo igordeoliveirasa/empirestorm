@@ -25,12 +25,13 @@
                  // The user is connected to Facebook                                                                                                                            
                  // and has authorized the app.                                                                                                                                  
                  // Now personalize the user experience                                                                                                                          
-
+                 alert("1")
                  FB.api('/me', function(response) {                                                                                                                              
                    var message = document.getElementById('welcomeMessage');                                                                                                      
                    message.innerHTML = 'Hello, ' + response.first_name;                                                                                                          
                  });                                                                                                                                                             
                } else {                                                                                                                                                          
+                   alert("2")
                  // The user has not authenticated your app,                                                                                                                     
                  // proceed with your normal (anonymous) flow.                                                                                                                   
                }                                                                                                                                                                 
