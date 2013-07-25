@@ -21,7 +21,6 @@ public class SessionManager {
 
     public SessionManager() {
         facebook = new FacebookFactory().getInstance();
-        facebook.setOAuthAppId("152531978232583", "c4d682df0073e6d4e6686d15bff3069e");
     }
 
     public Facebook getFacebook() {

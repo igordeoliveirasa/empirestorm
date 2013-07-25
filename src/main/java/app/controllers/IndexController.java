@@ -24,35 +24,26 @@ public class IndexController {
 
 	private final Result result;
 	private final Validator validator;
-	private HttpServletRequest request;
         private SessionManager sessionManager;
         
-	public IndexController(Result result,
-	Validator validator, HttpServletRequest request, SessionManager sessionManager) {
-		this.result = result;
-		this.validator = validator;
-                this.request = request;
-                this.sessionManager = sessionManager;
+	public IndexController(Result result, Validator validator, SessionManager sessionManager) {
+            this.result = result;
+            this.validator = validator;
+            this.sessionManager = sessionManager;
 	}
 	
         @Get("/")
-        public void index() {
-
-            try {
-                result.include("signedIn", sessionManager.getFacebook().getMe()!=null);
-            } catch (Exception ex) {
-                result.forwardTo(this).facebookLogin();
-            }
+        public void login() {            
+            result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/index"));
         }
         
-	@Get("/facebookLogin")
-	public void facebookLogin() {
-            
-            StringBuffer callbackURL = request.getRequestURL();
-            int index = callbackURL.lastIndexOf("/");
-            callbackURL.replace(index, callbackURL.length(), "").append("/");
-            System.out.println("LOG: " + callbackURL.toString());
-            result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/"));
-	}
-	
+        @Get("/index")
+        public void index(String code) {
+            try {
+                sessionManager.getFacebook().getOAuthAccessToken(code);
+                result.include("signedIn", sessionManager.getFacebook().getMe()!=null);
+            } catch (FacebookException ex) {
+                Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }	
 }
