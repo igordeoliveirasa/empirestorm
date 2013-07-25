@@ -14,7 +14,7 @@
 	<div class="field">
 		Facebook user:<br />
 	
-		<input type="text" name="feedback.facebookUserId" value="${feedback.facebookUserId}"/>
+                <input type="text" id="input-facebook-user-id" name="feedback.facebookUserId" value="${feedback.facebookUserId}"/>
 	</div>
 	
 	<div class="field">
