@@ -28,7 +28,7 @@
       FB.api('/me', function(response2) {
           alert(1)
         alert(response2.name);
-        alert(response2);
+        alert(response2.id);
       });
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
