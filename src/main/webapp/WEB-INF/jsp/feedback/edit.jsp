@@ -1,0 +1,6 @@
+<head>
+	<title>Feedback [edit]</title>
+</head>
+<body>
+	<%@include file="form.jsp"%>
+</body>
