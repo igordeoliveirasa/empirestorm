@@ -2,7 +2,7 @@
 	<title>Feedback [new]</title>
 </head>
 <body>
-    
+<div id="fb-root"></div>    
 <script>
   
   var facebookUserId = "";
