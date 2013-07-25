@@ -41,7 +41,7 @@ public class IndexController {
             try {
                 result.include("signedIn", sessionManager.getFacebook().getMe()!=null);
             } catch (Exception ex) {
-                result.redirectTo(this).facebookLogin();
+                result.forwardTo(this).facebookLogin();
             }
         }
         
