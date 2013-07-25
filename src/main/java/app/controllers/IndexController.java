@@ -7,6 +7,7 @@ import app.repositories.FeedbackRepository;
 import app.session.SessionManager;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Resource;
@@ -32,12 +33,16 @@ public class IndexController {
             this.sessionManager = sessionManager;
 	}
 	
-        @Get("/")
+        @Post
+        @Get
+        @Path("/")
         public void login() {            
             result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/index"));
         }
         
-        @Get("/index")
+        @Post
+        @Get
+        @Path("/index")
         public void index(String code) {
             try {
                 sessionManager.getFacebook().getOAuthAccessToken(code);
