@@ -52,7 +52,7 @@ public class IndexController {
             int index = callbackURL.lastIndexOf("/");
             callbackURL.replace(index, callbackURL.length(), "").append("/");
             System.out.println("LOG: " + callbackURL.toString());
-            result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL(callbackURL.toString()));
+            result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://www.empirestorm.com/"));
 	}
 	
 }
