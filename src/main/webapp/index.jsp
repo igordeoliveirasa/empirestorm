@@ -5,6 +5,9 @@
 <body>
 <div id="fb-root"></div>
 <script>
+  
+  var facebookUserId = "";
+  
   window.fbAsyncInit = function() {
   FB.init({
     appId      : '212988905522826', // App ID
@@ -24,12 +27,7 @@
       // The response object is returned with a status field that lets the app know the current
       // login status of the person. In this case, we're handling the situation where they 
       // have logged in to the app.
-      alert(2)
-      FB.api('/me', function(response2) {
-          alert(1)
-        alert(response2.name);
-        alert(response2.id);
-      });
+      window.location = "${linkTo[FeedbackController].newFeedback}";
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
       // FB.login() to prompt them to do so. 
@@ -38,7 +36,6 @@
       // (1) JavaScript created popup windows are blocked by most browsers unless they 
       // result from direct interaction from people using the app (such as a mouse click)
       // (2) it is a bad experience to be continually prompted to login upon page load.
-        alert(3)  
         FB.login();
     } else {
       // In this case, the person is not logged into Facebook, so we call the login() 
@@ -46,7 +43,6 @@
       // of whether they are logged into the app. If they aren't then they'll see the Login
       // dialog right after they log in to Facebook. 
       // The same caveats as above apply to the FB.login() call here.
-      alert(4)
       FB.login();
     }
   });
