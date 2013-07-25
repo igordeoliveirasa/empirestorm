@@ -37,10 +37,11 @@ public class IndexController {
 	
         @Get("/")
         public void index() {
+
             try {
                 result.include("signedIn", sessionManager.getFacebook().getMe()!=null);
-            } catch (FacebookException ex) {
-                Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                result.redirectTo(this).facebookLogin();
             }
         }
         
@@ -50,7 +51,7 @@ public class IndexController {
             StringBuffer callbackURL = request.getRequestURL();
             int index = callbackURL.lastIndexOf("/");
             callbackURL.replace(index, callbackURL.length(), "").append("/");
-            
+            System.out.println("LOG: " + callbackURL.toString());
             result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL(callbackURL.toString()));
 	}
 	
