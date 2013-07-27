@@ -21,12 +21,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Intercepts
 @RequestScoped
-public class SignedInAdminVerifier implements Interceptor {
+public class SignedInPlayerVerifier implements Interceptor {
     private HttpServletRequest request;
     private Result result;
     private SessionManager sessionManager;
     
-    public SignedInAdminVerifier(HttpServletRequest request, Result result, SessionManager sessionManager) {
+    public SignedInPlayerVerifier(HttpServletRequest request, Result result, SessionManager sessionManager) {
         this.request = request;
         this.result = result;
         this.sessionManager = sessionManager;
@@ -34,8 +34,6 @@ public class SignedInAdminVerifier implements Interceptor {
 
 
     public void intercept(InterceptorStack stack, ResourceMethod method, Object object) throws InterceptionException {
-        
-        //AccountController ac = (AccountController)object;
         
         if (!sessionManager.isSignedIn())
         {
