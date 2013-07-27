@@ -13,6 +13,7 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import static org.junit.Assert.*;
 
 public class PlayerCredentialsImplTest {
     
@@ -126,5 +127,33 @@ public class PlayerCredentialsImplTest {
         repository.findAll();        
         verify(entityManager).createQuery(eq("from app.models.PlayerCredentials"));
     }
+    
+    @Test
+    public void findByUsername() {
+        List<PlayerCredentials> playerCredentialses = new ArrayList<PlayerCredentials>();
+        playerCredentialses.add(new PlayerCredentials.Builder().withUsername("igordeoliveirasa@gmail.com").build());
+        
+        when(query.getResultList()).thenReturn(playerCredentialses);
+        when(entityManager.createQuery(anyString())).thenReturn(query);
+        
+        PlayerCredentials playerCredentials = repository.findByUsername("igordeoliveirasa@gmail.com");
+        
+        assertEquals(playerCredentials.getUsername(), "igordeoliveirasa@gmail.com");
+        
+        verify(query).setParameter("username", "igordeoliveirasa@gmail.com");
+        verify(entityManager).createQuery(eq("from app.models.PlayerCredentials e where upper(e.username) = upper(:username)"));
+    }
+    
+    @Test
+    public void findByUsernamInvalid() {        
+        when(query.getResultList()).thenReturn(new ArrayList());
+        when(entityManager.createQuery(anyString())).thenReturn(query);
+        
+        PlayerCredentials playerCredentials = repository.findByUsername("igordeoliveirasa@gmail.com");
+        
+        assertNull(playerCredentials);        
+        verify(query).setParameter("username", "igordeoliveirasa@gmail.com");
+        verify(entityManager).createQuery(eq("from app.models.PlayerCredentials e where upper(e.username) = upper(:username)"));
+    }    
 }
 

@@ -13,6 +13,7 @@ import app.session.SessionManager;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.core.InterceptorStack;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockSerializationResult;
@@ -21,7 +22,9 @@ import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.User;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +41,7 @@ import org.mockito.Spy;
  *
  * @author igor
  */
-public class SignedInPlayerVerifierTest {
+public class RequestParametersPreparerTest {
     
     private Validator validator;
     private Result result;
@@ -64,45 +67,53 @@ public class SignedInPlayerVerifierTest {
     @Mock
     private ResourceMethod resourceMethod;
     
-    private SignedInPlayerVerifier signedInPlayerVerifier;
+    @Mock
+    private MutableRequest mutableRequest;
+    
+    private RequestParametersPreparer requestParametersPreparer;
             
     @Before
     public void setUp() {
         validator = new MockValidator();
         result = new MockResult();
         MockitoAnnotations.initMocks(this);
-        signedInPlayerVerifier = new SignedInPlayerVerifier(request, result, sessionManager);
+        requestParametersPreparer = new RequestParametersPreparer(mutableRequest, sessionManager, request);
     }
 
     @Test
-    public void interceptSignedIn() {
-        when(sessionManager.isSignedIn()).thenReturn(true);
+    public void interceptValidCharacters() {
+        
         Object object = new Object();
-        signedInPlayerVerifier.intercept(stack, resourceMethod, object);
+        
+        Map map = new HashMap();
+        map.put("key1", new String[] {"value1"});
+        map.put("key2", new String[] {"value2"});
+        map.put("key3", new String[] {"value3"});
+        
+        when(mutableRequest.getParameterMap()).thenReturn(map);
+        requestParametersPreparer.intercept(stack, resourceMethod, object);
         verify(stack).next(eq(resourceMethod), eq(object));
     }
     
     @Test
-    public void interceptNotSignedIn() {
-        when(sessionManager.isSignedIn()).thenReturn(false);
+    public void interceptInvalidCharacters() {
+        
         Object object = new Object();
-        signedInPlayerVerifier.intercept(stack, resourceMethod, object);
-        verify(stack,never()).next(any(ResourceMethod.class), anyObject());
+        
+        Map map = new HashMap();
+        map.put("key1", new String[] {"value1"});
+        map.put("key2", new String[] {"<script>Olá Mundo!</script>"});
+        map.put("key3", new String[] {"value3"});
+        
+        when(mutableRequest.getParameterMap()).thenReturn(map);
+        requestParametersPreparer.intercept(stack, resourceMethod, object);
+        verify(mutableRequest).setParameter("key2", "");
+        verify(stack).next(eq(resourceMethod), eq(object));
     }
     
     @Test
     public void acceptsSuccessfuly() {
-        when(resourceMethod.containsAnnotation(SignedInPlayerNotImportant.class)).thenReturn(false);
-        Object object = new Object();
-        boolean result = signedInPlayerVerifier.accepts(resourceMethod);
+        boolean result = requestParametersPreparer.accepts(resourceMethod);
         assertTrue(result);
-    }
-    
-    @Test
-    public void acceptsNotSuccessfuly() {
-        when(resourceMethod.containsAnnotation(SignedInPlayerNotImportant.class)).thenReturn(true);
-        Object object = new Object();
-        boolean result = signedInPlayerVerifier.accepts(resourceMethod);
-        assertFalse(result);
     }
 }

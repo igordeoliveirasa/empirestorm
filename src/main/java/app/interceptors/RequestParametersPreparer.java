@@ -63,9 +63,10 @@ public class RequestParametersPreparer implements Interceptor {
                 String parameterName = (String)pairs.getKey();
                 
                 // parametros que nao deverao ser tratados
+                /*
                 if (parameterName.equals("account.css")) {
                     continue;
-                }
+                }*/
                 
                 String values[] = (String[]) pairs.getValue();
                 
