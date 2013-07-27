@@ -44,7 +44,7 @@ public class FeedbackController {
             validator.checking(new Validations() { {
                 that(!Strings.isNullOrEmpty(feedback.getMessage()), "feedback.message", "feedback.message.empty");
             } });            
-            validator.onErrorUsePageOf(IndexController.class).index();
+            validator.onErrorForwardTo(IndexController.class).index();
             
             
             validator.onErrorUsePageOf(this).newFeedback();
