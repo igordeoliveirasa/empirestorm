@@ -2,6 +2,7 @@ package app.controllers;
 
 
 
+import app.interceptors.SignedInPlayerNotImportant;
 import app.models.Player;
 import app.models.PlayerCredentials;
 import app.repositories.PlayerCredentialsRepository;
@@ -42,6 +43,7 @@ public class IndexController {
         @Post
         @Get
         @Path("/")
+        @SignedInPlayerNotImportant
         public void login() {
             result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://localhost:8080/loginCallback"));
         }
@@ -49,6 +51,7 @@ public class IndexController {
         @Post
         @Get
         @Path("/loginCallback")
+        @SignedInPlayerNotImportant
         public void loginCallback(String code) {
             try {
                 sessionManager.getFacebook().getOAuthAccessToken(code);
