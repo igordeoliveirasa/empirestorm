@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <head>
 	<title>Index</title>
 </head>
@@ -25,20 +26,54 @@
                       <td>Gold</td>
                       <td>$ 0.00</td>
                     </tr>
+                    <tr>
+                      <td>Comida</td>
+                      <td>0</td>
+                    </tr>
                   </tbody>
                 </table>
+                
+                <h4>Itens B√°sicos</h4>
+                <table class="table table-bordered">
+                  <!--thead>
+                    <tr>
+                      <th></th>
+                    </tr>
+                  </thead-->
+                  <tbody>
+                    <tr>
+                      <td>Madeira</td>
+                      <td>0</td>
+                    </tr>
+                  </tbody>
+                </table>                
+                
+                <h4>Acess√≥rios</h4>
+                <table class="table table-bordered">
+                  <!--thead>
+                    <tr>
+                      <th></th>
+                    </tr>
+                  </thead-->
+                  <tbody>
+                    <tr>
+                      <td>Bast√£o</td>
+                      <td>0</td>
+                    </tr>
+                  </tbody>
+                </table>                
                 
                 <hr/>
                 
                 <h4>Feedback</h4>
                 <form style="width: 254px;" action="${pageContext.request.contextPath}/feedbacks" method="post">
-                    <textarea style="width: 100%;" name="feedback.message" placeholder="CrÌticas, sugestıes e/ou elogios..." rows="10">${feedback.message}</textarea><br/>
+                    <textarea style="width: 100%;" name="feedback.message" placeholder="Cr√≠ticas, sugest√µes e/ou elogios..." rows="10">${feedback.message}</textarea><br/>
                     <button type="submit">Enviar</button>
                 </form>                
             </div>
 
             <div class="span6">
-                <h4>AÁıes</h4>
+                <h4>A√ß√µes</h4>
             </div>
 
             <div class="span3">
@@ -46,17 +81,16 @@
                 <h4>Ranking de Amigos</h4>
                 <ul>
                     <c:forEach var="player" items="${players}">
-                        <li>${player.name}</li>
+                        <li>${player.name} | $ 0.00</li>
                     </c:forEach>
                 </ul>
                 <hr/>
                 <h4>Ranking Geral</h4>
                 <ul>
                     <c:forEach var="player" items="${players}">
-                        <li>${player.name}</li>
+                        <li>${player.name} | $ 0.00</li>
                     </c:forEach>
                 </ul>
-
             </div>
         </div>
     </div>
