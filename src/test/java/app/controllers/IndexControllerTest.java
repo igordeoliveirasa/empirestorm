@@ -162,22 +162,4 @@ public class IndexControllerTest {
         assertEquals(((List<Player>)result.included().get("players")).get(1).getId(), 3L, 0);
         assertEquals(((List<Player>)result.included().get("players")).get(2).getId(), 4L, 0);
     }
-    
-    /*
-     * 
-class PlayerMatcher extends ArgumentMatcher<Player> {
-
-                @Override
-                public boolean matches(Object argument) {
-                    Player player = (Player)argument;
-                    return  player.getCredentials().getUsername().equals("igordeoliveirasa@gmail.com")&&
-                            player.getCredentials().getPassword().equals("123") && 
-                            player.getCredentials().getPlayer().getId().compareTo(player.getId()) == 0 &&
-                            player.getName().equals("Igor de Oliveira Sá");
-                }
-                
-            }
-            
-            verify(playerRepository, times(1)).create(argThat(new PlayerMatcher()));
-     */
 }
