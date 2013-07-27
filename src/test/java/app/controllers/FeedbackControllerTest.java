@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.caelum.vraptor.util.test.MockValidator;
+import br.com.caelum.vraptor.validator.ValidationException;
 import facebook4j.Facebook;
 import facebook4j.User;
 import static org.junit.Assert.assertNotNull;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 import org.mockito.MockitoAnnotations;
 
 public class FeedbackControllerTest {
@@ -83,5 +85,24 @@ public class FeedbackControllerTest {
         }
         
         verify(feedbackRepository).create(argThat(new FeedbackMatcher()));
+    }
+
+    @Test 
+    public void createEmpty() {
+        try 
+        {
+            Player player = new Player.Builder().withId(1L).build();
+            when(sessionManager.getPlayer()).thenReturn(player);
+            when(playerRepository.find(1L)).thenReturn(player);
+
+            Feedback feedback = new Feedback.Builder().withId(0L).withPlayer(player).withMessage("").build();
+
+            feedbackController.create(feedback);
+            fail();
+        } 
+        catch (ValidationException e)
+        {
+            
+        }
     }
 }

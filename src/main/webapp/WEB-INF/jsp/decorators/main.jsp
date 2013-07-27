@@ -13,9 +13,30 @@
     <decorator:head/>
   </head>
   <body>
-    <decorator:body/>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/javascripts/jquery.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/javascripts/application.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/stylesheets/bootstrap/js/bootstrap.min.js"></script>
+              
+    <div class="container">
+        <h1>Empire Storm</h1>
+
+        <strong>${sm.player.name}</strong>
+        <hr/>
+        
+        <c:forEach var="info" items="${infos}">
+            
+            <div class="alert alert-info">
+                ${info} <button type="button" class="close" data-dismiss="alert">×</button>
+            </div>
+        </c:forEach>
+
+        <c:forEach var="error" items="${errors}">
+            <div class="alert alert-error">
+                ${error.message} <button type="button" class="close" data-dismiss="alert">×</button>
+            </div>
+        </c:forEach>
+
+        <decorator:body/>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/javascripts/jquery.min.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/javascripts/application.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/stylesheets/bootstrap/js/bootstrap.min.js"></script>
+    </div>      
   </body>
 </html>
