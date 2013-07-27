@@ -35,6 +35,33 @@ public class PlayerCredentials extends Entity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public static class Builder {
+
+        public Builder() {
+            this.item = new PlayerCredentials();
+        }
+        private PlayerCredentials item;
+
+        public Builder withUsername(final String username) {
+            this.item.username = username;
+            return this;
+        }
+
+        public Builder withPassword(final String password) {
+            this.item.password = password;
+            return this;
+        }
+
+        public Builder withPlayer(final Player player) {
+            this.item.player = player;
+            return this;
+        }
+
+        public PlayerCredentials build() {
+            return this.item;
+        }
+    }
         
         
 }

@@ -73,6 +73,7 @@ public class IndexController {
                 result.redirectTo(this).index();
             } catch (FacebookException ex) {
                 Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+                result.redirectTo(this).login();
             }
         }
         
