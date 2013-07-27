@@ -1,6 +1,7 @@
 package app.models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @javax.persistence.Entity
@@ -9,7 +10,13 @@ public class Player extends Entity {
 
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerCredentials credentials;
+    
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private PlayerState state = new PlayerState();
 
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Place place;
+    
     public void setName(String name) {
             this.name = name;
     }
@@ -43,6 +50,11 @@ public class Player extends Entity {
             return this;
         }
 
+        public Builder withState(final PlayerState state) {
+            this.item.state = state;
+            return this;
+        }
+
         public Builder withCredentials(final PlayerCredentials credentials) {
             this.item.credentials = credentials;
             return this;
@@ -51,5 +63,21 @@ public class Player extends Entity {
         public Player build() {
             return this.item;
         }
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }

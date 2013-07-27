@@ -6,10 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><decorator:title default="Vraptor Scaffold"/></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheets/application.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheets/bootstrap/css/bootstrap.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="${pageContext.request.contextPath}/stylesheets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>    
+    <link href="${pageContext.request.contextPath}/stylesheets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>        
     <decorator:head/>
   </head>
   <body>

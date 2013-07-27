@@ -3,11 +3,18 @@ package app.controllers;
 
 
 import app.interceptors.SignedInPlayerNotImportant;
+import app.models.Place;
+import app.models.PlaceType;
 import app.models.Player;
 import app.models.PlayerCredentials;
+import app.repositories.PlaceRepository;
+import app.repositories.PlaceTypeRepository;
 import app.repositories.PlayerCredentialsRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
+import app.utils.DistanceCalculator;
+import app.utils.MessagesProperties;
+import app.vos.PlaceToTravel;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -29,13 +36,21 @@ public class IndexController {
         private SessionManager sessionManager;
         private PlayerCredentialsRepository playerCredentialsRepository;
         private PlayerRepository playerRepository;
+        private MessagesProperties messagesProperties;
+        private PlaceTypeRepository placeTypeRepository;
+        private PlaceRepository placeRepository;
+        private DistanceCalculator distanceCalculator;
         
-	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository) {
+	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository, MessagesProperties messagesProperties, PlaceTypeRepository placeTypeRepository, PlaceRepository placeRepository, DistanceCalculator distanceCalculator) {
             this.result = result;
             this.validator = validator;
             this.sessionManager = sessionManager;
             this.playerCredentialsRepository = playerCredentialsRepository;
             this.playerRepository = playerRepository;
+            this.messagesProperties = messagesProperties;
+            this.placeTypeRepository = placeTypeRepository;
+            this.placeRepository = placeRepository;
+            this.distanceCalculator = distanceCalculator;
             
             result.include("sm", sessionManager);
 	}
@@ -45,6 +60,29 @@ public class IndexController {
         @Path("/")
         @SignedInPlayerNotImportant
         public void login() {
+            
+            if (playerRepository.findAll().size()==0) {
+            
+                PlaceType placeTypeLake = new PlaceType.Builder().withName("Lago").build();
+                placeTypeRepository.create(placeTypeLake);
+                
+                PlaceType placeTypeForest = new PlaceType.Builder().withName("Floresta Fechada").build();
+                placeTypeRepository.create(placeTypeForest);
+                
+                PlaceType placeTypeField = new PlaceType.Builder().withName("Campo aberto e gramado").build();
+                placeTypeRepository.create(placeTypeField);
+                
+                
+                Place lakeland = new Place.Builder().withName("Lakeland").withType(placeTypeLake).withX(5).withY(5).build();
+                placeRepository.create(lakeland);
+                
+                Place borealForest = new Place.Builder().withName("Boreal").withType(placeTypeForest).withX(20).withX(20).build();
+                placeRepository.create(borealForest);
+                
+                Place stormField = new Place.Builder().withName("Storm").withType(placeTypeField).withX(0).withX(0).build();
+                placeRepository.create(stormField);
+            }
+            
             result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://localhost:8080/loginCallback"));
         }
         
@@ -70,7 +108,9 @@ public class IndexController {
                     player.setCredentials(playerCredentials);
                     playerCredentials.setPlayer(player);
                     
-                    playerRepository.create(player);                    
+                    player.setPlace(placeRepository.findByName("Storm"));
+                    
+                    playerRepository.create(player);
                 }
                 sessionManager.signIn(playerCredentials.getPlayer());
                 result.redirectTo(this).index();
@@ -84,6 +124,27 @@ public class IndexController {
         @Get
         @Path("/index")
         public void index() {
+            
+            // informing player status
+            result.include("playerStatus", messagesProperties.getMessage("instructions.first.steps"));
+            
+            
+            // informing places
+            List<Place> places = placeRepository.findAll();
+            List<PlaceToTravel> placesToTravel = new ArrayList<PlaceToTravel>();
+            for (Place place : places) {
+                PlaceToTravel placeToTravel = new PlaceToTravel();
+                placeToTravel.setPlace(place);
+                Place currentPlace = sessionManager.getPlayer().getPlace();
+                placeToTravel.setDistance(distanceCalculator.calculateDistance(currentPlace.getX(), currentPlace.getY(), placeToTravel.getPlace().getX(), placeToTravel.getPlace().getY()));
+                placesToTravel.add(placeToTravel);
+            }
+            result.include("placesToTravel", placesToTravel);
+            
+            
+            
+
+            // listing statistics
             List<Player> players = new ArrayList<Player>();
             for (Player player: playerRepository.findAll()) {
                 if (player.getId().compareTo(sessionManager.getPlayer().getId())!=0) {
