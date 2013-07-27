@@ -35,7 +35,7 @@ import org.mockito.Spy;
  *
  * @author igor
  */
-public class SessionTest {
+public class SessionManagerTest {
         
     @Mock
     private Facebook facebook;
@@ -46,12 +46,18 @@ public class SessionTest {
         MockitoAnnotations.initMocks(this);
         sessionManager = new SessionManager();
     }
-
+    
     @Test
-    public void signInAndSignOut() {        
-        sessionManager.signIn(new Player.Builder().build());
+    public void getFacebook() {
+        assertNotNull(sessionManager.getFacebook());
+    }
+    
+    @Test
+    public void signInAndSignOut() {
+        sessionManager.signIn(new Player.Builder().withId(1L).build());
         assertTrue(sessionManager.isSignedIn());
-
+        assertEquals(sessionManager.getPlayer().getId(), 1L, 0);
+        
         sessionManager.signOut();
         assertFalse(sessionManager.isSignedIn());
     }

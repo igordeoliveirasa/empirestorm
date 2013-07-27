@@ -18,7 +18,6 @@ public interface PlayerCredentialsRepository {
 	PlayerCredentials find(Long id);
 	
 	List<PlayerCredentials> findAll();
-        
         PlayerCredentials findByUsername(String username);
 
 }

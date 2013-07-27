@@ -27,4 +27,30 @@ public class Feedback extends Entity {
         this.player = player;
     }
 
+    public static class Builder {
+
+        public Builder() {
+            this.item = new Feedback();
+        }
+        private Feedback item;
+
+        public Builder withId(final Long id) {
+            this.item.setId(id);
+            return this;
+        }
+
+        public Builder withMessage(final String message) {
+            this.item.message = message;
+            return this;
+        }
+
+        public Builder withPlayer(final Player player) {
+            this.item.player = player;
+            return this;
+        }
+
+        public Feedback build() {
+            return this.item;
+        }
+    }
 }

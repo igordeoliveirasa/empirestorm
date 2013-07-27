@@ -32,48 +32,18 @@ public class FeedbackController {
                 this.sessionManager = sessionManager;
                 this.playerRepository = playerRepository;
 	}
-	
-	@Get("/feedbacks")
-	public List<Feedback> index() {
-		return repository.findAll();
-	}
-	
+		
 	@Post("/feedbacks")
 	public void create(Feedback feedback) {
-		validator.validate(feedback);
-		validator.onErrorUsePageOf(this).newFeedback();
-                feedback.setPlayer(playerRepository.find(sessionManager.getPlayer().getId()));
-		repository.create(feedback);
-		result.redirectTo(IndexController.class).index();
+            validator.validate(feedback);
+            validator.onErrorUsePageOf(this).newFeedback();
+            feedback.setPlayer(playerRepository.find(sessionManager.getPlayer().getId()));
+            repository.create(feedback);
+            result.redirectTo(IndexController.class).index();
 	}
 	
 	@Get("/feedbacks/new")
 	public Feedback newFeedback() {
-		return new Feedback();
-	}
-	
-	@Put("/feedbacks")
-	public void update(Feedback feedback) {
-		validator.validate(feedback);
-		validator.onErrorUsePageOf(this).edit(feedback);
-		repository.update(feedback);
-		result.redirectTo(this).index();
-	}
-	
-	@Get("/feedbacks/{feedback.id}/edit")
-	public Feedback edit(Feedback feedback) {
-		
-		return repository.find(feedback.getId());
-	}
-
-	@Get("/feedbacks/{feedback.id}")
-	public Feedback show(Feedback feedback) {
-		return repository.find(feedback.getId());
-	}
-
-	@Delete("/feedbacks/{feedback.id}")
-	public void destroy(Feedback feedback) {
-		repository.destroy(repository.find(feedback.getId()));
-		result.redirectTo(this).index();  
-	}
+            return new Feedback();
+	}		
 }
