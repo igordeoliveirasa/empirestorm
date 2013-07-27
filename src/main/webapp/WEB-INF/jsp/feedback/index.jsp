@@ -6,8 +6,6 @@
 
 	<table>
 		<tr>
-			<th>Facebook user</th>
-			<th>Subject</th>
 			<th>Message</th>
 			<th></th>
 			<th></th>
@@ -16,8 +14,6 @@
 
 		<c:forEach items="${feedbackList}" var="feedback">
 			<tr>
-				<td>${feedback.facebookUserId}</td>
-				<td>${feedback.subject}</td>
 				<td>${feedback.message}</td>
 				<td><a href="${pageContext.request.contextPath}/feedbacks/${feedback.id}">show</a></td>
 				<td><a href="${pageContext.request.contextPath}/feedbacks/${feedback.id}/edit">edit</a></td>

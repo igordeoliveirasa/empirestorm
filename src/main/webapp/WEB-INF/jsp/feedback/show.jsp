@@ -3,14 +3,6 @@
 </head>
 <body>
 	<p>
-		<b>Facebook user:</b>
-		${feedback.facebookUserId}
-	</p>
-	<p>
-		<b>Subject:</b>
-		${feedback.subject}
-	</p>
-	<p>
 		<b>Message:</b>
 		${feedback.message}
 	</p>

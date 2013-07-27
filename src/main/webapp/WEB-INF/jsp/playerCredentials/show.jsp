@@ -3,16 +3,8 @@
 </head>
 <body>
 	<p>
-		<b>Name:</b>
-		${playerCredentials.name}
-	</p>
-	<p>
 		<b>Email:</b>
 		${playerCredentials.email}
-	</p>
-	<p>
-		<b>Facebook user:</b>
-		${playerCredentials.facebookUserId}
 	</p>
 	<p>
 		<b>Password:</b>

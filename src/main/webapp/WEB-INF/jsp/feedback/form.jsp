@@ -12,21 +12,8 @@
 	</c:if>
 
 	<div class="field">
-		Facebook user:<br />
-	
-                <input type="text" id="input-facebook-user-id" name="feedback.facebookUserId" value="${feedback.facebookUserId}"/>
-	</div>
-	
-	<div class="field">
-		Subject:<br />
-	
-		<input type="text" name="feedback.subject" value="${feedback.subject}"/>
-	</div>
-	
-	<div class="field">
-		Message:<br />
-	
-                <textarea name="feedback.message">${feedback.message}</textarea>
+            Por favor, deixe-nos sugestões, críticas ou elogios:<br />
+            <input type="text" name="feedback.message" value="${feedback.message}"/>
 	</div>
 	
   <div class="actions">

@@ -12,21 +12,9 @@
 	</c:if>
 
 	<div class="field">
-		Name:<br />
-	
-		<input type="text" name="playerCredentials.name" value="${playerCredentials.name}"/>
-	</div>
-	
-	<div class="field">
 		Email:<br />
 	
 		<input type="text" name="playerCredentials.email" value="${playerCredentials.email}"/>
-	</div>
-	
-	<div class="field">
-		Facebook user:<br />
-	
-		<input type="text" name="playerCredentials.facebookUserId" value="${playerCredentials.facebookUserId}"/>
 	</div>
 	
 	<div class="field">

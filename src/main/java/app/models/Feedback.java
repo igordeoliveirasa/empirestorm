@@ -1,34 +1,30 @@
 package app.models;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+
 @javax.persistence.Entity
 public class Feedback extends Entity {
 
-	private String facebookUserId;
-	private String subject;
-	private String message;
+    private String message;
 
-	public void setFacebookUserId(String facebookUserId) {
-		this.facebookUserId = facebookUserId;
-	}
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Player player;
 
-	public String getFacebookUserId() {
-		return facebookUserId;
-	}
+    public void setMessage(String message) {
+            this.message = message;
+    }
 
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
+    public String getMessage() {
+            return message;
+    }
 
-	public String getSubject() {
-		return subject;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getMessage() {
-		return message;
-	}
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
 }

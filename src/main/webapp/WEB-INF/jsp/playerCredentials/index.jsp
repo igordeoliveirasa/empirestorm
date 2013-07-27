@@ -6,9 +6,7 @@
 
 	<table>
 		<tr>
-			<th>Name</th>
 			<th>Email</th>
-			<th>Facebook user</th>
 			<th>Password</th>
 			<th></th>
 			<th></th>
@@ -17,9 +15,7 @@
 
 		<c:forEach items="${playerCredentialsList}" var="playerCredentials">
 			<tr>
-				<td>${playerCredentials.name}</td>
 				<td>${playerCredentials.email}</td>
-				<td>${playerCredentials.facebookUserId}</td>
 				<td>${playerCredentials.password}</td>
 				<td><a href="${pageContext.request.contextPath}/playerCredentials/${playerCredentials.id}">show</a></td>
 				<td><a href="${pageContext.request.contextPath}/playerCredentials/${playerCredentials.id}/edit">edit</a></td>
