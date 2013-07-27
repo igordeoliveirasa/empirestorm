@@ -8,8 +8,8 @@
         <hr/>
         <div class="row-fluid">
 
-            <div class="span2">
-                <h3>Resumo</h3>
+            <div class="span3">
+                <h4>Resumo</h4>
                 <table class="table table-bordered">
                   <!--thead>
                     <tr>
@@ -18,38 +18,45 @@
                   </thead-->
                   <tbody>
                     <tr>
+                      <td>Level</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
                       <td>Gold</td>
                       <td>$ 0.00</td>
                     </tr>
                   </tbody>
                 </table>
+                
+                <hr/>
+                
+                <h4>Feedback</h4>
+                <form style="width: 254px;" action="${pageContext.request.contextPath}/feedbacks" method="post">
+                    <textarea style="width: 100%;" name="feedback.message" placeholder="Críticas, sugestões e/ou elogios..." rows="10">${feedback.message}</textarea><br/>
+                    <button type="submit">Enviar</button>
+                </form>                
             </div>
 
-            <div class="span7">
-                <h3>Ações</h3>
+            <div class="span6">
+                <h4>Ações</h4>
             </div>
 
             <div class="span3">
 
-                <h3>Ranking de Amigos</h3>
+                <h4>Ranking de Amigos</h4>
+                <ul>
+                    <c:forEach var="player" items="${players}">
+                        <li>${player.name}</li>
+                    </c:forEach>
+                </ul>
+                <hr/>
+                <h4>Ranking Geral</h4>
                 <ul>
                     <c:forEach var="player" items="${players}">
                         <li>${player.name}</li>
                     </c:forEach>
                 </ul>
 
-                <h3>Ranking Geral</h3>
-                <ul>
-                    <c:forEach var="player" items="${players}">
-                        <li>${player.name}</li>
-                    </c:forEach>
-                </ul>
-
-                <h3>Feedback</h3>
-                <form action="${pageContext.request.contextPath}/feedbacks" method="post">
-                    <textarea name="feedback.message" placeholder="Críticas, sugestões e/ou elogios..." rows="10">${feedback.message}</textarea><br/>
-                    <button type="submit">Enviar</button>
-                </form>                
             </div>
         </div>
     </div>
