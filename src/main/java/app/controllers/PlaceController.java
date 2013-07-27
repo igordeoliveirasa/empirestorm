@@ -32,7 +32,7 @@ public class PlaceController {
 	public List<Place> index() {
 		return repository.findAll();
 	}
-	
+		
 	@Post("/places")
 	public void create(Place place) {
 		validator.validate(place);

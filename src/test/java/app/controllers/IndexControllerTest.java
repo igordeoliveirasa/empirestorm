@@ -11,8 +11,7 @@ import app.repositories.PlaceTypeRepository;
 import app.repositories.PlayerCredentialsRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
-import app.utils.DistanceCalculator;
-import app.utils.MessagesProperties;
+import app.components.MessagesProperties;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -59,7 +58,6 @@ public class IndexControllerTest {
     private PlayerRepository playerRepository;
     
     private MessagesProperties messagesProperties;
-    private DistanceCalculator distanceCalculator;
     
     @Mock
     private PlaceRepository placeRepository;
@@ -75,7 +73,7 @@ public class IndexControllerTest {
         result = new MockResult();
         messagesProperties = new MessagesProperties();
         MockitoAnnotations.initMocks(this);
-        indexController = new IndexController(result, validator, sessionManager, playerCredentialsRepository, playerRepository, messagesProperties, placeTypeRepository, placeRepository, distanceCalculator);
+        indexController = new IndexController(result, validator, sessionManager, playerCredentialsRepository, playerRepository, messagesProperties, placeTypeRepository, placeRepository, null);
     }
 
     @Test

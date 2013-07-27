@@ -11,11 +11,14 @@ public class Player extends Entity {
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerCredentials credentials;
     
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private PlayerState state = new PlayerState();
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)    
+    private PlayerState state = new PlayerState.Builder().withThirstyLevel(0.95).withHungryLevel(0.55).build();
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Place place;
+    
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private PlayerSkills skills = new PlayerSkills.Builder().withWalkVelocity(1.0).build();
     
     public void setName(String name) {
             this.name = name;
@@ -79,5 +82,13 @@ public class Player extends Entity {
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public PlayerSkills getSkills() {
+        return skills;
+    }
+
+    public void setSkills(PlayerSkills skills) {
+        this.skills = skills;
     }
 }

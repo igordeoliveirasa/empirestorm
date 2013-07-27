@@ -52,12 +52,13 @@
             <p>Você se encontra em: <strong>${sm.player.place.name}</strong></p>
             <p>Tipo de ambiente: <strong>${sm.player.place.type.name}</strong></p>
 
-            <h5>Aqui você pode:</h5>
+            <!--h5>Aqui você pode:</h5>
             <a href="#" class="btn btn-small btn-success">Beber água</a>
             
-            <hr/>
+            <hr/-->
             
-            <h5>Ou ir para:</h5>
+            <hr/>
+            <h5>Ir para:</h5>
             
                 <table class="table table-bordered">
                     <thead>
@@ -70,12 +71,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="placeToTravel" items="${placesToTravel}">
+                        <c:forEach var="action" items="${actionsWalk}">
                             <tr>
-                                <td>${placeToTravel.place.name}</td>
-                                <td>${placeToTravel.place.type.name}</td>
-                                <td>${placeToTravel.formattedDistance} kms</td>
-                                <td>0</td>
+                                <td>${action.toPlace.name}</td>
+                                <td>${action.toPlace.type.name}</td>
+                                <td>${action.formattedDistance}</td>
+                                <td>${action.formattedDuration}</td>
                                 <td><a href="#" class="btn btn-small btn-success">Ir</a></td>
                             </tr>
                       </c:forEach>

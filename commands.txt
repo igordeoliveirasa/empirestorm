@@ -1,0 +1,65 @@
+# GIT
+
+git submodule init 
+git submodule update
+
+
+# Heroku
+
+remote add heroku git@heroku.com:prateleiravirtual.git
+heroku config:add TZ=America/Sao_Paulo
+git pull origin master
+
+
+# DATABASE
+
+drop schema public cascade;
+create schema public;
+
+# Most visualized Items of Prateleira Virtual
+
+select i.account_id, i.name, ivc.item_id, ivc.viewcount from itemviewcount ivc 
+inner join item i
+on (ivc.item_id = i.id)
+order by viewcount desc
+
+
+
+
+
+# Problema Magna e Rapha
+
+x search
+x item
+x instockitemadvertisingrequest
+x customerreceivenews
+x customer_accounts
+x category
+cart
+brand
+account
+
+
+
+update search set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+update item set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+update instockitemadvertisingrequest set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+update customerreceivenews set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+
+update customer_accounts set accounts_id = 'temp' where accounts_id = 'magnaeraphamaeefilhafazendoarte'
+
+update category set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+
+update cart set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+
+update brand set account_id = 'temp' where account_id = 'magnaeraphamaeefilhafazendoarte'
+
+
+
+
+update account set id = 'magnaerapha' where id = 'magnaeraphamaeefilhafazendoarte'
+
+
+
+
+'magnaeraphamaeefilhafazendoarte'

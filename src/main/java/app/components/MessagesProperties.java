@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.utils;
+package app.components;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.validator.I18nMessage;

@@ -12,9 +12,9 @@ import app.repositories.PlaceTypeRepository;
 import app.repositories.PlayerCredentialsRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
-import app.utils.DistanceCalculator;
-import app.utils.MessagesProperties;
-import app.vos.PlaceToTravel;
+import app.components.MessagesProperties;
+import app.components.PlayerActionFactory;
+import app.models.PlayerActionWalk;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -39,9 +39,9 @@ public class IndexController {
         private MessagesProperties messagesProperties;
         private PlaceTypeRepository placeTypeRepository;
         private PlaceRepository placeRepository;
-        private DistanceCalculator distanceCalculator;
+        private PlayerActionFactory playerActionFactory;
         
-	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository, MessagesProperties messagesProperties, PlaceTypeRepository placeTypeRepository, PlaceRepository placeRepository, DistanceCalculator distanceCalculator) {
+	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository, MessagesProperties messagesProperties, PlaceTypeRepository placeTypeRepository, PlaceRepository placeRepository, PlayerActionFactory playerActionFactory) {
             this.result = result;
             this.validator = validator;
             this.sessionManager = sessionManager;
@@ -50,7 +50,7 @@ public class IndexController {
             this.messagesProperties = messagesProperties;
             this.placeTypeRepository = placeTypeRepository;
             this.placeRepository = placeRepository;
-            this.distanceCalculator = distanceCalculator;
+            this.playerActionFactory = playerActionFactory;
             
             result.include("sm", sessionManager);
 	}
@@ -124,25 +124,15 @@ public class IndexController {
         @Get
         @Path("/index")
         public void index() {
-            
             // informing player status
             result.include("playerStatus", messagesProperties.getMessage("instructions.first.steps"));
             
-            
-            // informing places
+            // informing actions
+            // informing places to walk
             List<Place> places = placeRepository.findAll();
-            List<PlaceToTravel> placesToTravel = new ArrayList<PlaceToTravel>();
-            for (Place place : places) {
-                PlaceToTravel placeToTravel = new PlaceToTravel();
-                placeToTravel.setPlace(place);
-                Place currentPlace = sessionManager.getPlayer().getPlace();
-                placeToTravel.setDistance(distanceCalculator.calculateDistance(currentPlace.getX(), currentPlace.getY(), placeToTravel.getPlace().getX(), placeToTravel.getPlace().getY()));
-                placesToTravel.add(placeToTravel);
-            }
-            result.include("placesToTravel", placesToTravel);
-            
-            
-            
+            places.remove(sessionManager.getPlayer().getPlace());
+            List<PlayerActionWalk> playerActionWalks = playerActionFactory.buildTravelingWalking(sessionManager.getPlayer(), places);
+            result.include("actionsWalk", playerActionWalks);
 
             // listing statistics
             List<Player> players = new ArrayList<Player>();
