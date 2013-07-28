@@ -54,8 +54,28 @@
                 ${actionWalkInProgress.fromPlace.name} - ${actionWalkInProgress.toPlace.name}<br/>
                 
                 <div class="progress progress-striped active">
-                    <div class="bar" style="width: ${actionWalkInProgress.progressValue*100}%;"></div>
+                    <div id="bar1" class="bar" style="width: ${actionWalkInProgress.progressValue*100}%;"></div>
                 </div>
+                
+                <script>
+                    
+                    
+                    firstTime = ${actionWalkInProgress.createdAt.time};
+                    currentTime = ${actionWalkInProgress.currentTime};
+                    endTime = (firstTime + ${actionWalkInProgress.durationInMinutes} * 60 * 1000);
+
+                    setInterval(myMethod, 1000); // each 1 second
+
+                    function myMethod( )
+                    {
+                        currentTime += 1000;
+                        diffTime1 = currentTime - firstTime;
+                        diffTime2 = endTime - firstTime;
+                        perc = (diffTime1/diffTime2) * 100;
+                        $("#bar1").css('width', perc + '%');
+                    }
+
+                </script>
             </c:forEach>
             
                 

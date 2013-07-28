@@ -89,4 +89,8 @@ public class PlayerActionWalk extends Entity {
         
         return diffTime1 / diffTime2;   
     }
+    
+    public long getCurrentTime() {
+        return new Date().getTime();
+    }
 }

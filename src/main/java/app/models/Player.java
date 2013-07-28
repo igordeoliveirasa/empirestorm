@@ -18,7 +18,7 @@ public class Player extends Entity {
     private Place place;
     
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private PlayerSkills skills = new PlayerSkills.Builder().withWalkVelocity(1.0).build();
+    private PlayerSkills skills = new PlayerSkills.Builder().withWalkVelocity(1).build();
     
     public void setName(String name) {
             this.name = name;

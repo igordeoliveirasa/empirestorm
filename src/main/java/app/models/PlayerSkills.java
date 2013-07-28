@@ -3,13 +3,13 @@ package app.models;
 @javax.persistence.Entity
 public class PlayerSkills extends Entity {
 
-    private Double walkVelocity;
+    private double walkVelocity;
 
-    public void setWalkVelocity(Double walkVelocity) {
+    public void setWalkVelocity(double walkVelocity) {
             this.walkVelocity = walkVelocity;
     }
 
-    public Double getWalkVelocity() {
+    public double getWalkVelocity() {
             return walkVelocity;
     }
 
@@ -20,7 +20,7 @@ public class PlayerSkills extends Entity {
         }
         private PlayerSkills item;
 
-        public Builder withWalkVelocity(final Double walkVelocity) {
+        public Builder withWalkVelocity(final double walkVelocity) {
             this.item.walkVelocity = walkVelocity;
             return this;
         }
