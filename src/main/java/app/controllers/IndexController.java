@@ -124,21 +124,20 @@ public class IndexController {
         @Get
         @Path("/index")
         public void index() {
-            // informing player status
-            result.include("playerStatus", messagesProperties.getMessage("instructions.first.steps"));
             
             // informing actions
             // informing places to walk
             List<Place> places = placeRepository.findAll();
             places.remove(sessionManager.getPlayer().getPlace());
-            List<PlayerActionWalk> playerActionWalks = playerActionFactory.buildTravelingWalking(sessionManager.getPlayer(), places);
+            Player player = sessionManager.getPlayer();
+            List<PlayerActionWalk> playerActionWalks = playerActionFactory.buildTravelingWalking(player, player.getPlace(), places);
             result.include("actionsWalk", playerActionWalks);
 
             // listing statistics
             List<Player> players = new ArrayList<Player>();
-            for (Player player: playerRepository.findAll()) {
-                if (player.getId().compareTo(sessionManager.getPlayer().getId())!=0) {
-                    players.add(player);
+            for (Player p: playerRepository.findAll()) {
+                if (p.getId().compareTo(sessionManager.getPlayer().getId())!=0) {
+                    players.add(p);
                 }
             }
             result.include("players", players);

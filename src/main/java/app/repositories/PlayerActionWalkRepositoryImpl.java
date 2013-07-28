@@ -4,6 +4,9 @@ import javax.persistence.EntityManager;
 
 import br.com.caelum.vraptor.ioc.Component;
 import app.models.PlayerActionWalk;
+import app.models.PlayerCredentials;
+import java.util.List;
+import javax.persistence.Query;
 
 @Component
 public class PlayerActionWalkRepositoryImpl
@@ -13,4 +16,11 @@ public class PlayerActionWalkRepositoryImpl
 	PlayerActionWalkRepositoryImpl(EntityManager entityManager) {
 		super(entityManager);
 	}
+
+    @Override
+    public List<PlayerActionWalk> findAllNotFinalized() {
+        Query query = entityManager.createQuery("from " + clazz.getName() + " e where e.finalized = false");
+        List<PlayerActionWalk> result = query.getResultList();
+        return result;
+    }
 }

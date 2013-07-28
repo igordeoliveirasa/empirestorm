@@ -19,4 +19,6 @@ public interface PlayerActionWalkRepository {
 	
 	List<PlayerActionWalk> findAll();
 
+        List<PlayerActionWalk> findAllNotFinalized();
+
 }

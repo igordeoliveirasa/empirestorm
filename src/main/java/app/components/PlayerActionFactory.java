@@ -20,21 +20,21 @@ import java.util.List;
 @ApplicationScoped
 public class PlayerActionFactory {
         
-    public PlayerActionWalk buildTravelingWalking(Player player, Place destination) {
+    public PlayerActionWalk buildTravelingWalking(Player player, Place fromPlace, Place toPlace) {
         
         PlayerActionWalk playerAction = new PlayerActionWalk();        
         playerAction.setPlayer(player);
-        playerAction.setFromPlace(player.getPlace());
-        playerAction.setToPlace(destination);
+        playerAction.setFromPlace(fromPlace);
+        playerAction.setToPlace(toPlace);
         
         return playerAction;
     }
     
-    public List<PlayerActionWalk> buildTravelingWalking(Player player, List<Place> destinations) 
+    public List<PlayerActionWalk> buildTravelingWalking(Player player, Place fromPlace, List<Place> destinations) 
     {
         List<PlayerActionWalk> ret = new ArrayList<PlayerActionWalk>();
         for (Place destination : destinations) {
-            ret.add(buildTravelingWalking(player, destination));
+            ret.add(buildTravelingWalking(player, fromPlace, destination));
         }
         return ret;
     }

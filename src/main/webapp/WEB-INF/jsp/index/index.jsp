@@ -77,7 +77,7 @@
                                 <td>${action.toPlace.type.name}</td>
                                 <td>${action.formattedDistance}</td>
                                 <td>${action.formattedDuration}</td>
-                                <td><a href="#" class="btn btn-small btn-success">Ir</a></td>
+                                <td><a href="${linkTo[PlayerController].actionWalkTo}${action.toPlace.id}" class="btn btn-small btn-success">Ir</a></td>
                             </tr>
                       </c:forEach>
                     </tbody>
