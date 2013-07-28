@@ -1,12 +1,15 @@
 package app.models;
 
 import java.awt.Point;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
+import org.joda.time.Minutes;
 
 @javax.persistence.Entity
 public class PlayerActionWalk extends Entity {
@@ -75,4 +78,15 @@ public class PlayerActionWalk extends Entity {
         int totalMinutes = new Double(getDurationInMinutes()).intValue();
         return totalMinutes + " mins";
     }    
+    
+    public double getProgressValue() { 
+        long firstTime = getCreatedAt().getTime();
+        long currentTime = new Date().getTime();
+        long endTime = (firstTime + getDurationInMinutes() * 60 * 1000);
+        
+        double diffTime1 = currentTime - firstTime;
+        double diffTime2 = endTime - firstTime;
+        
+        return diffTime1 / diffTime2;   
+    }
 }

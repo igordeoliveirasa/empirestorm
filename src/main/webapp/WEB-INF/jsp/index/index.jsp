@@ -48,6 +48,17 @@
         </div>
 
         <div class="span6">
+            
+            <h4>Atividades em progresso</h4>
+            <c:forEach var="actionWalkInProgress" items="${actionsWalkInProgress}">
+                ${actionWalkInProgress.fromPlace.name} - ${actionWalkInProgress.toPlace.name}<br/>
+                
+                <div class="progress progress-striped active">
+                    <div class="bar" style="width: ${actionWalkInProgress.progressValue*100}%;"></div>
+                </div>
+            </c:forEach>
+            
+                
             <h4>Localização</h4>
             <p>Você se encontra em: <strong>${sm.player.place.name}</strong></p>
             <p>Tipo de ambiente: <strong>${sm.player.place.type.name}</strong></p>

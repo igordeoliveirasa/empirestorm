@@ -15,6 +15,7 @@ import app.session.SessionManager;
 import app.components.MessagesProperties;
 import app.components.PlayerActionFactory;
 import app.models.PlayerActionWalk;
+import app.repositories.PlayerActionWalkRepository;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -40,8 +41,9 @@ public class IndexController {
         private PlaceTypeRepository placeTypeRepository;
         private PlaceRepository placeRepository;
         private PlayerActionFactory playerActionFactory;
+        private PlayerActionWalkRepository playerActionWalkRepository;
         
-	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository, MessagesProperties messagesProperties, PlaceTypeRepository placeTypeRepository, PlaceRepository placeRepository, PlayerActionFactory playerActionFactory) {
+	public IndexController(Result result, Validator validator, SessionManager sessionManager, PlayerCredentialsRepository playerCredentialsRepository, PlayerRepository playerRepository, MessagesProperties messagesProperties, PlaceTypeRepository placeTypeRepository, PlaceRepository placeRepository, PlayerActionFactory playerActionFactory, PlayerActionWalkRepository playerActionWalkRepository) {
             this.result = result;
             this.validator = validator;
             this.sessionManager = sessionManager;
@@ -51,6 +53,7 @@ public class IndexController {
             this.placeTypeRepository = placeTypeRepository;
             this.placeRepository = placeRepository;
             this.playerActionFactory = playerActionFactory;
+            this.playerActionWalkRepository = playerActionWalkRepository;
             
             result.include("sm", sessionManager);
 	}
@@ -125,7 +128,10 @@ public class IndexController {
         @Path("/index")
         public void index() {
             
-            // informing actions
+            // informing actions in progress
+            List<PlayerActionWalk> playerActionsWalkInProgress = playerActionWalkRepository.findAllNotFinalized();
+            result.include("actionsWalkInProgress", playerActionsWalkInProgress);
+            
             // informing places to walk
             List<Place> places = placeRepository.findAll();
             places.remove(sessionManager.getPlayer().getPlace());
