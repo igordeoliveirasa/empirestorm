@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @Resource
 public class IndexController {
