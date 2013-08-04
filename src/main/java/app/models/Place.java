@@ -57,6 +57,11 @@ public class Place extends Entity {
         }
         private Place item;
 
+        public Builder withId(final Long id) {
+            this.item.setId(id);
+            return this;
+        }
+
         public Builder withName(final String name) {
             this.item.name = name;
             return this;

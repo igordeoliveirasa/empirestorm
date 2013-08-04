@@ -51,7 +51,7 @@
             
             <h4>Atividades em progresso</h4>
             <c:forEach var="actionWalkInProgress" items="${actionsWalkInProgress}">
-                ${actionWalkInProgress.fromPlace.name} - ${actionWalkInProgress.toPlace.name}<br/>
+                Caminhando de "${actionWalkInProgress.fromPlace.name}" para "${actionWalkInProgress.toPlace.name}"...<br/>
                 
                 <div class="progress progress-striped active">
                     <div id="bar1" class="bar" style="width: ${actionWalkInProgress.progressValue*100}%;"></div>
@@ -64,15 +64,20 @@
                     currentTime = ${actionWalkInProgress.currentTime};
                     endTime = (firstTime + ${actionWalkInProgress.durationInMinutes} * 60 * 1000);
 
-                    setInterval(myMethod, 1000); // each 1 second
+                    intervalId = setInterval(myMethod, 500); // each 1 second
 
                     function myMethod( )
                     {
-                        currentTime += 1000;
+                        currentTime += 500;
                         diffTime1 = currentTime - firstTime;
                         diffTime2 = endTime - firstTime;
                         perc = (diffTime1/diffTime2) * 100;
                         $("#bar1").css('width', perc + '%');
+                        
+                        if (perc>=100) {
+                            clearInterval(intervalId);
+                            document.location.href = "/";
+                        }
                     }
 
                 </script>

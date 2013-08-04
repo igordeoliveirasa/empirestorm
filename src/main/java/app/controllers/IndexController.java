@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Resource
 public class IndexController {
@@ -75,6 +77,9 @@ public class IndexController {
                 PlaceType placeTypeField = new PlaceType.Builder().withName("Campo aberto e gramado").build();
                 placeTypeRepository.create(placeTypeField);
                 
+                PlaceType placeTypeMountain = new PlaceType.Builder().withName("Montanha").build();
+                placeTypeRepository.create(placeTypeMountain);
+                
                 
                 Place lakeland = new Place.Builder().withName("Lakeland").withType(placeTypeLake).withX(5).withY(5).build();
                 placeRepository.create(lakeland);
@@ -82,8 +87,14 @@ public class IndexController {
                 Place borealForest = new Place.Builder().withName("Boreal").withType(placeTypeForest).withX(20).withX(20).build();
                 placeRepository.create(borealForest);
                 
-                Place stormField = new Place.Builder().withName("Storm").withType(placeTypeField).withX(0).withX(0).build();
+                Place stormField = new Place.Builder().withName("Storm Field").withType(placeTypeField).withX(0).withX(0).build();
                 placeRepository.create(stormField);
+                
+                Place stormMountain = new Place.Builder().withName("Storm Mountain").withType(placeTypeMountain).withX(1).withX(1).build();
+                placeRepository.create(stormMountain);
+
+                Place dragonMountain = new Place.Builder().withName("Dragon Mountain").withType(placeTypeMountain).withX(800).withX(800).build();
+                placeRepository.create(dragonMountain);
             }
             
             result.redirectTo(sessionManager.getFacebook().getOAuthAuthorizationURL("http://localhost:8080/loginCallback"));
@@ -111,7 +122,7 @@ public class IndexController {
                     player.setCredentials(playerCredentials);
                     playerCredentials.setPlayer(player);
                     
-                    player.setPlace(placeRepository.findByName("Storm"));
+                    player.setPlace(placeRepository.findByName("Storm Field"));
                     
                     playerRepository.create(player);
                 }
@@ -123,29 +134,65 @@ public class IndexController {
             }
         }
         
+        
+        
+        
         @Post
         @Get
         @Path("/index")
         public void index() {
+            Player player = sessionManager.getPlayer(playerRepository);
+            
+            // checking finalized progress
+            finalizeCompletedActions(player);
+//            List<PlayerActionWalk> notFinalizedWalks = playerActionWalkRepository.findAllNotFinalized();
+//            for (PlayerActionWalk action : notFinalizedWalks) {
+//                if (action.getProgressValue()>=1.0) {
+//                    action.setFinalized(true);
+//                    playerActionWalkRepository.update(action);
+//                    player.setPlace(action.getToPlace());
+//                    playerRepository.update(player);
+//                }
+//            }
+//            
             
             // informing actions in progress
             List<PlayerActionWalk> playerActionsWalkInProgress = playerActionWalkRepository.findAllNotFinalized();
             result.include("actionsWalkInProgress", playerActionsWalkInProgress);
             
             // informing places to walk
-            List<Place> places = placeRepository.findAll();
-            places.remove(sessionManager.getPlayer().getPlace());
-            Player player = sessionManager.getPlayer();
-            List<PlayerActionWalk> playerActionWalks = playerActionFactory.buildTravelingWalking(player, player.getPlace(), places);
+            //List<Place> places = placeRepository.findAll();
+            //places.remove(player.getPlace());
+            //List<PlayerActionWalk> playerActionWalks = playerActionFactory.buildTravelingWalking(player, player.getPlace(), places);
+            List<PlayerActionWalk> playerActionWalks = getAvailablePlacesToWalk(player);
             result.include("actionsWalk", playerActionWalks);
 
             // listing statistics
             List<Player> players = new ArrayList<Player>();
             for (Player p: playerRepository.findAll()) {
-                if (p.getId().compareTo(sessionManager.getPlayer().getId())!=0) {
+                if (p.getId().compareTo(player.getId())!=0) {
                     players.add(p);
                 }
             }
             result.include("players", players);
         }	
+
+    public void finalizeCompletedActions(Player player) {        
+        // checking finalized progress
+        List<PlayerActionWalk> notFinalizedWalks = playerActionWalkRepository.findAllNotFinalized();
+        for (PlayerActionWalk action : notFinalizedWalks) {
+            if (action.getProgressValue()>=1.0) {
+                action.setFinalized(true);
+                playerActionWalkRepository.update(action);
+                player.setPlace(action.getToPlace());
+                playerRepository.update(player);
+            }
+        }
+    }
+
+    public List<PlayerActionWalk> getAvailablePlacesToWalk(Player player) {
+        List<Place> places = placeRepository.findAll();
+        places.remove(player.getPlace());
+        return playerActionFactory.buildTravelingWalking(player, player.getPlace(), places);        
+    }
 }

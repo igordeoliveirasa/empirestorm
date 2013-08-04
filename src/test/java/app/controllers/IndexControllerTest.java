@@ -12,6 +12,10 @@ import app.repositories.PlayerCredentialsRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
 import app.components.MessagesProperties;
+import app.components.PlayerActionFactory;
+import app.models.Place;
+import app.models.PlayerActionWalk;
+import app.repositories.PlayerActionWalkRepository;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -65,6 +69,12 @@ public class IndexControllerTest {
     @Mock
     private PlaceTypeRepository placeTypeRepository;
     
+    @Mock
+    private PlayerActionFactory playerActionFactory;
+    
+    @Mock
+    private PlayerActionWalkRepository playerActionWalkRepository;
+    
     private IndexController indexController;
             
     @Before
@@ -73,7 +83,7 @@ public class IndexControllerTest {
         result = new MockResult();
         messagesProperties = new MessagesProperties();
         MockitoAnnotations.initMocks(this);
-        indexController = new IndexController(result, validator, sessionManager, playerCredentialsRepository, playerRepository, messagesProperties, placeTypeRepository, placeRepository, null);
+        indexController = new IndexController(result, validator, sessionManager, playerCredentialsRepository, playerRepository, messagesProperties, placeTypeRepository, placeRepository, playerActionFactory, playerActionWalkRepository);
     }
 
     @Test
@@ -162,16 +172,82 @@ public class IndexControllerTest {
     
     @Test
     public void index() {
-        when(sessionManager.getPlayer()).thenReturn(new Player.Builder().withId(2L).build());
+        Place place = new Place.Builder().build();
+        Player player = new Player.Builder().withId(2L).withPlace(place).build();
+        
+        when(sessionManager.getPlayer(eq(playerRepository))).thenReturn(player);
+        
         List<Player> players = new ArrayList<Player>();
         players.add(new Player.Builder().withId(1L).build());
         players.add(new Player.Builder().withId(2L).build());
         players.add(new Player.Builder().withId(3L).build());
         players.add(new Player.Builder().withId(4L).build());
         when(playerRepository.findAll()).thenReturn(players);
+        
+        List<Place> places = new ArrayList<Place>();
+        places.add(new Place.Builder().withName("A").build());
+        places.add(new Place.Builder().withName("B").build());
+        places.add(new Place.Builder().withName("C").build());
+        places.add(new Place.Builder().withName("D").build());
+        
+        when(placeRepository.findAll()).thenReturn(places);
+        
+        List<PlayerActionWalk> playerActionsWalk = new ArrayList<PlayerActionWalk>();
+        playerActionsWalk.add(new PlayerActionWalk.Builder().build());
+        playerActionsWalk.add(new PlayerActionWalk.Builder().build());
+        playerActionsWalk.add(new PlayerActionWalk.Builder().build());
+        playerActionsWalk.add(new PlayerActionWalk.Builder().build());
+        
+        when(playerActionFactory.buildTravelingWalking(eq(player), eq(place), eq(places))).thenReturn(playerActionsWalk);
         indexController.index();
+        
         assertEquals(((List<Player>)result.included().get("players")).get(0).getId(), 1L, 0);
         assertEquals(((List<Player>)result.included().get("players")).get(1).getId(), 3L, 0);
         assertEquals(((List<Player>)result.included().get("players")).get(2).getId(), 4L, 0);
     }
+    
+    
+    @Test
+    public void finalizeCompletedActions() {
+        Player player = new Player.Builder().build();
+        when(playerActionWalkRepository.findAllNotFinalized()).thenReturn(new ArrayList<PlayerActionWalk>());
+        indexController.finalizeCompletedActions(player);
+        verify(playerActionWalkRepository).findAllNotFinalized();
+    }
+    
+    
+    @Test
+    public void getAvailablePlacesToWalk() {
+         Place currentPlace = new Place.Builder().withId(1L).withName("Storm Field").build();
+        Player player = new Player.Builder().withId(2L).withPlace(currentPlace).build();
+        
+        List<Place> places = new ArrayList<Place>();
+        places.add(new Place.Builder().withId(2L).withName("A").build());
+        places.add(new Place.Builder().withId(3L).withName("B").build());
+        places.add(currentPlace);
+        places.add(new Place.Builder().withId(4L).withName("C").build());
+
+        
+        when(placeRepository.findAll()).thenReturn(places);
+        
+        List<PlayerActionWalk> playerActionsWalk = indexController.getAvailablePlacesToWalk(player);
+        
+        
+        class PlacesMatcher extends ArgumentMatcher<List<Place>> {
+            @Override
+            public boolean matches(Object argument) {
+                List<Place> places = (List<Place>) argument;
+                return  places.get(0).getName().equals("A") &&
+                        places.get(1).getName().equals("B") &&
+                        places.get(2).getName().equals("C");
+            }
+        }
+        
+        verify(playerActionFactory).buildTravelingWalking(eq(player), eq(currentPlace), argThat(new PlacesMatcher()));
+        //assertEquals(playerActionsWalk.get(0).getFromPlace().getName(), "Storm Field");
+        //assertEquals(playerActionsWalk.get(0).getToPlace().getName(), "A");
+        //assertEquals(playerActionsWalk.get(1).getToPlace().getName(), "B");
+        //assertEquals(playerActionsWalk.get(2).getToPlace().getName(), "C");
+    }
+    
 }

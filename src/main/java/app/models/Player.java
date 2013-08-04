@@ -53,6 +53,11 @@ public class Player extends Entity {
             return this;
         }
 
+        public Builder withPlace(final Place place) {
+            this.item.place = place;
+            return this;
+        }
+
         public Builder withState(final PlayerState state) {
             this.item.state = state;
             return this;

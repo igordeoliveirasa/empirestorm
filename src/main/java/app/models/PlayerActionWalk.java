@@ -93,4 +93,36 @@ public class PlayerActionWalk extends Entity {
     public long getCurrentTime() {
         return new Date().getTime();
     }
+
+    public static class Builder {
+
+        public Builder() {
+            this.item = new PlayerActionWalk();
+        }
+        private PlayerActionWalk item;
+
+        public Builder withPlayer(final Player player) {
+            this.item.player = player;
+            return this;
+        }
+
+        public Builder withFromPlace(final Place fromPlace) {
+            this.item.fromPlace = fromPlace;
+            return this;
+        }
+
+        public Builder withToPlace(final Place toPlace) {
+            this.item.toPlace = toPlace;
+            return this;
+        }
+
+        public Builder withFinalized(final boolean finalized) {
+            this.item.finalized = finalized;
+            return this;
+        }
+
+        public PlayerActionWalk build() {
+            return this.item;
+        }
+    }
 }

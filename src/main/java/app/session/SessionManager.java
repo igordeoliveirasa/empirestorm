@@ -6,6 +6,7 @@ package app.session;
 
 import app.models.Player;
 import app.models.PlayerCredentials;
+import app.repositories.PlayerRepository;
 import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.SessionScoped;
 import facebook4j.Facebook;
@@ -20,10 +21,10 @@ import facebook4j.FacebookFactory;
 @SessionScoped
 public class SessionManager {
     private Facebook facebook;
-    private Player player;
+    private Player player = null;
     
     public SessionManager() {
-        facebook = new FacebookFactory().getInstance();
+        this.facebook = new FacebookFactory().getInstance();
     }
 
     public Facebook getFacebook() {
@@ -44,5 +45,10 @@ public class SessionManager {
 
     public Player getPlayer() {
         return player;
+    }
+    
+    public Player getPlayer(PlayerRepository playerRepository) {
+        this.player = playerRepository.find(player.getId());
+        return getPlayer();
     }
 }
