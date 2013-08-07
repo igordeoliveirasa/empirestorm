@@ -77,7 +77,7 @@ public class PlayerControllerTest {
         Player player = new Player.Builder().withId(1L).withPlace(currentPlace).build();
         
         when(sessionManager.getPlayer()).thenReturn(player);
-        when(playerActionWalkRepository.findAllNotFinalized()).thenReturn(new ArrayList<PlayerActionWalk>());
+        when(playerActionWalkRepository.get()).thenReturn(null);
         when(playerRepository.find(1L)).thenReturn(player);
         
         Place toPlace = new Place.Builder().withId(2L).withX(1).withY(1).build();
@@ -102,4 +102,23 @@ public class PlayerControllerTest {
         
         verify(playerActionWalkRepository).create(argThat(new PlayerActionWalkMatcher()));
     }
+    
+    @Test 
+    public void actionStopWalkTo() {        
+        PlayerActionWalk playerActionWalk = new PlayerActionWalk.Builder().withId(2L).build();
+        when(playerActionWalkRepository.get()).thenReturn(playerActionWalk);
+        playerController.actionStopWalkTo();
+        
+        class PlayerActionWalkMatcher extends ArgumentMatcher<PlayerActionWalk> {
+
+            @Override
+            public boolean matches(Object argument) {
+                PlayerActionWalk playerActionWalk = (PlayerActionWalk) argument;
+                return playerActionWalk.getId().compareTo(2L) == 0;
+            }
+            
+        }
+        
+        verify(playerActionWalkRepository).destroy(argThat(new PlayerActionWalkMatcher()));
+    }    
 }

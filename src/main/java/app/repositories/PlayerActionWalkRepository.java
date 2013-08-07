@@ -14,11 +14,6 @@ public interface PlayerActionWalkRepository {
 	PlayerActionWalk update(PlayerActionWalk entity);
 	
 	void destroy(PlayerActionWalk entity);
-	
-	PlayerActionWalk find(Long id);
-	
-	List<PlayerActionWalk> findAll();
-
-        List<PlayerActionWalk> findAllNotFinalized();
-
+        
+	PlayerActionWalk get();
 }

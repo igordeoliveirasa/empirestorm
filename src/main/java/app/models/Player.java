@@ -7,7 +7,9 @@ import javax.persistence.OneToOne;
 @javax.persistence.Entity
 public class Player extends Entity {
     private String name;
-
+    private int gold;
+    
+    
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerCredentials credentials;
     
@@ -72,6 +74,13 @@ public class Player extends Entity {
             this.item.credentials = credentials;
             return this;
         }
+        
+        public Builder withGold(final int gold) {
+            this.item.gold = gold;
+            return this;
+        }
+        
+        
 
         public Player build() {
             return this.item;
@@ -100,5 +109,13 @@ public class Player extends Entity {
 
     public void setSkills(PlayerSkills skills) {
         this.skills = skills;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }

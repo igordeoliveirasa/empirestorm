@@ -18,9 +18,12 @@ public class PlayerActionWalkRepositoryImpl
 	}
 
     @Override
-    public List<PlayerActionWalk> findAllNotFinalized() {
+    public PlayerActionWalk get() {
         Query query = entityManager.createQuery("from " + clazz.getName() + " e where e.finalized = false");
         List<PlayerActionWalk> result = query.getResultList();
-        return result;
+        if (result.size()>0) {
+            return result.get(0);
+        }
+        return null;
     }
 }

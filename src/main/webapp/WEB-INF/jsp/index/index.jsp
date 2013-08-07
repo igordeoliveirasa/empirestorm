@@ -48,77 +48,79 @@
         </div>
 
         <div class="span6">
-            
-            <h4>Atividades em progresso</h4>
-            <c:forEach var="actionWalkInProgress" items="${actionsWalkInProgress}">
-                Caminhando de "${actionWalkInProgress.fromPlace.name}" para "${actionWalkInProgress.toPlace.name}"...<br/>
+            <c:if test="${playerActionWalkInProgress!=null}">
+                <h4>Atividades em progresso</h4>
                 
-                <div class="progress progress-striped active">
-                    <div id="bar1" class="bar" style="width: ${actionWalkInProgress.progressValue*100}%;"></div>
-                </div>
-                
-                <script>
-                    
-                    
-                    firstTime = ${actionWalkInProgress.createdAt.time};
-                    currentTime = ${actionWalkInProgress.currentTime};
-                    endTime = (firstTime + ${actionWalkInProgress.durationInMinutes} * 60 * 1000);
+                    Caminhando de "${playerActionWalkInProgress.fromPlace.name}" para "${playerActionWalkInProgress.toPlace.name}"...<br/>
 
-                    intervalId = setInterval(myMethod, 500); // each 1 second
+                    <div class="progress progress-striped active">
+                        <div id="bar1" class="bar" style="width: ${playerActionWalkInProgress.progressValue*100}%;"></div>
+                    </div>
+                    <a href="#" class="btn btn-small btn-danger">Parar</a>
 
-                    function myMethod( )
-                    {
-                        currentTime += 500;
-                        diffTime1 = currentTime - firstTime;
-                        diffTime2 = endTime - firstTime;
-                        perc = (diffTime1/diffTime2) * 100;
-                        $("#bar1").css('width', perc + '%');
-                        
-                        if (perc>=100) {
-                            clearInterval(intervalId);
-                            document.location.href = "/";
+                    <script>
+
+
+                        firstTime = ${playerActionWalkInProgress.createdAt.time};
+                        currentTime = ${playerActionWalkInProgress.currentTime};
+                        endTime = (firstTime + ${playerActionWalkInProgress.durationInMinutes} * 60 * 1000);
+
+                        intervalId = setInterval(myMethod, 500); // each 1 second
+
+                        function myMethod( )
+                        {
+                            currentTime += 500;
+                            diffTime1 = currentTime - firstTime;
+                            diffTime2 = endTime - firstTime;
+                            perc = (diffTime1/diffTime2) * 100;
+                            $("#bar1").css('width', perc + '%');
+
+                            if (perc>=100) {
+                                clearInterval(intervalId);
+                                document.location.href = "/";
+                            }
                         }
-                    }
 
-                </script>
-            </c:forEach>
+                    </script>
+            </c:if>
             
-                
-            <h4>Localização</h4>
-            <p>Você se encontra em: <strong>${sm.player.place.name}</strong></p>
-            <p>Tipo de ambiente: <strong>${sm.player.place.type.name}</strong></p>
+            <c:if test="${playerActionWalkInProgress==null}">
+                <h4>Localização</h4>
+                <p>Você se encontra em: <strong>${sm.player.place.name}</strong></p>
+                <p>Tipo de ambiente: <strong>${sm.player.place.type.name}</strong></p>
 
-            <!--h5>Aqui você pode:</h5>
-            <a href="#" class="btn btn-small btn-success">Beber água</a>
-            
-            <hr/-->
-            
-            <hr/>
-            <h5>Ir para:</h5>
-            
-                <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>Ambiente</th>
-                        <th>Distância</th>
-                        <th>Tempo</th>
-                        <th>#</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="action" items="${actionsWalk}">
-                            <tr>
-                                <td>${action.toPlace.name}</td>
-                                <td>${action.toPlace.type.name}</td>
-                                <td>${action.formattedDistance}</td>
-                                <td>${action.formattedDuration}</td>
-                                <td><a href="${linkTo[PlayerController].actionWalkTo}${action.toPlace.id}" class="btn btn-small btn-success">Ir</a></td>
-                            </tr>
-                      </c:forEach>
-                    </tbody>
-                  </table>   
-                
+                <!--h5>Aqui você pode:</h5>
+                <a href="#" class="btn btn-small btn-success">Beber água</a>
+
+                <hr/-->
+
+                <hr/>
+                <h5>Ir para:</h5>
+
+                    <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Nome</th>
+                            <th>Ambiente</th>
+                            <th>Distância</th>
+                            <th>Tempo</th>
+                            <th>#</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="action" items="${actionsWalk}">
+                                <tr>
+                                    <td>${action.toPlace.name}</td>
+                                    <td>${action.toPlace.type.name}</td>
+                                    <td>${action.formattedDistance}</td>
+                                    <td>${action.formattedDuration}</td>
+                                    <td><a href="${linkTo[PlayerController].actionWalkTo}${action.toPlace.id}" class="btn btn-small btn-success">Ir</a></td>
+                                </tr>
+                          </c:forEach>
+                        </tbody>
+                      </table>   
+            </c:if>
+
                 
             
         </div>
@@ -135,7 +137,7 @@
                 <tbody>
                   <tr>
                     <td>Gold</td>
-                    <td>$ 0.00</td>
+                    <td>$ ${sm.player.gold}</td>
                   </tr>
                 </tbody>
             </table>
@@ -174,14 +176,14 @@
             <h4>Ranking de Amigos</h4>
             <ul>
                 <c:forEach var="player" items="${players}">
-                    <li>${player.name} | $ 0.00</li>
+                    <li>${player.name} | $ ${player.gold}</li>
                 </c:forEach>
             </ul>
             <hr/>
             <h4>Ranking Geral</h4>
             <ul>
                 <c:forEach var="player" items="${players}">
-                    <li>${player.name} | $ 0.00</li>
+                    <li>${player.name} | $ ${player.gold}</li>
                 </c:forEach>
             </ul>
         </div>

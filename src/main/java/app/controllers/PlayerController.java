@@ -43,7 +43,7 @@ public class PlayerController {
     @Get("/player/action/walkTo/{placeId}")
     public void actionWalkTo(Long placeId) {
         
-        final boolean isBusy = playerActionWalkRepository.findAllNotFinalized().size()!=0;
+        final boolean isBusy = playerActionWalkRepository.get() != null;
         validator.checking(new Validations() { {
             that(!isBusy, "action.busy", "action.busy");
         } });            
@@ -54,6 +54,15 @@ public class PlayerController {
         PlayerActionWalk playerActionWalk = playerActionFactory.buildTravelingWalking(player, player.getPlace(), place);
         playerActionWalk.setCreatedAt(new Date());
         playerActionWalkRepository.create(playerActionWalk);
+        result.redirectTo(IndexController.class).index();
+    }
+    
+    @Get("/player/action/walkTo/stop")
+    public void actionStopWalkTo() {
+        PlayerActionWalk playerActionWalk = playerActionWalkRepository.get();
+        if (playerActionWalk!=null) {
+            playerActionWalkRepository.destroy(playerActionWalk);
+        }
         result.redirectTo(IndexController.class).index();
     }
 }

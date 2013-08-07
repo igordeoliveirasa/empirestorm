@@ -82,16 +82,16 @@ public class IndexController {
                 Place lakeland = new Place.Builder().withName("Lakeland").withType(placeTypeLake).withX(5).withY(5).build();
                 placeRepository.create(lakeland);
                 
-                Place borealForest = new Place.Builder().withName("Boreal").withType(placeTypeForest).withX(20).withX(20).build();
+                Place borealForest = new Place.Builder().withName("Boreal").withType(placeTypeForest).withX(20).withY(20).build();
                 placeRepository.create(borealForest);
                 
-                Place stormField = new Place.Builder().withName("Storm Field").withType(placeTypeField).withX(0).withX(0).build();
+                Place stormField = new Place.Builder().withName("Storm Field").withType(placeTypeField).withX(0).withY(0).build();
                 placeRepository.create(stormField);
                 
-                Place stormMountain = new Place.Builder().withName("Storm Mountain").withType(placeTypeMountain).withX(1).withX(1).build();
+                Place stormMountain = new Place.Builder().withName("Storm Mountain").withType(placeTypeMountain).withX(1).withY(1).build();
                 placeRepository.create(stormMountain);
 
-                Place dragonMountain = new Place.Builder().withName("Dragon Mountain").withType(placeTypeMountain).withX(800).withX(800).build();
+                Place dragonMountain = new Place.Builder().withName("Dragon Mountain").withType(placeTypeMountain).withX(800).withY(800).build();
                 placeRepository.create(dragonMountain);
             }
             
@@ -155,8 +155,8 @@ public class IndexController {
 //            
             
             // informing actions in progress
-            List<PlayerActionWalk> playerActionsWalkInProgress = playerActionWalkRepository.findAllNotFinalized();
-            result.include("actionsWalkInProgress", playerActionsWalkInProgress);
+            PlayerActionWalk playerActionWalkInProgress = playerActionWalkRepository.get();
+            result.include("playerActionWalkInProgress", playerActionWalkInProgress);
             
             // informing places to walk
             //List<Place> places = placeRepository.findAll();
@@ -177,15 +177,14 @@ public class IndexController {
 
     public void finalizeCompletedActions(Player player) {        
         // checking finalized progress
-        List<PlayerActionWalk> notFinalizedWalks = playerActionWalkRepository.findAllNotFinalized();
-        for (PlayerActionWalk action : notFinalizedWalks) {
-            if (action.getProgressValue()>=1.0) {
-                action.setFinalized(true);
-                playerActionWalkRepository.update(action);
-                player.setPlace(action.getToPlace());
-                playerRepository.update(player);
-            }
+        PlayerActionWalk notFinalizedWalk = playerActionWalkRepository.get();
+        if (notFinalizedWalk!=null && notFinalizedWalk.getProgressValue()>=1.0) {
+            notFinalizedWalk.setFinalized(true);
+            playerActionWalkRepository.update(notFinalizedWalk);
+            player.setPlace(notFinalizedWalk.getToPlace());
+            playerRepository.update(player);
         }
+
     }
 
     public List<PlayerActionWalk> getAvailablePlacesToWalk(Player player) {

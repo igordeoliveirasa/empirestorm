@@ -212,15 +212,14 @@ public class IndexControllerTest {
     @Test
     public void finalizeCompletedActions() {
         Player player = new Player.Builder().build();
-        when(playerActionWalkRepository.findAllNotFinalized()).thenReturn(new ArrayList<PlayerActionWalk>());
+        when(playerActionWalkRepository.get()).thenReturn(null);
         indexController.finalizeCompletedActions(player);
-        verify(playerActionWalkRepository).findAllNotFinalized();
+        verify(playerActionWalkRepository).get();
     }
     
     @Test
     public void finalizeCompletedActions2() {
         Player player = new Player.Builder().withSkills(new PlayerSkills.Builder().withWalkVelocity(1L).build()).build();
-        List<PlayerActionWalk> notFinalizedWalk = new ArrayList<PlayerActionWalk>();
         
         Place fromPlace = new Place.Builder().withId(1L).withName("From Place").withX(0).withY(0).build();
         Place toPlace = new Place.Builder().withId(3L).withName("To Place").withX(1).withY(1).build();
@@ -228,11 +227,11 @@ public class IndexControllerTest {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         
-        notFinalizedWalk.add(new PlayerActionWalk.Builder().withPlayer(player).withCreatedAt(calendar.getTime()).withFromPlace(fromPlace).withToPlace(toPlace).withFinalized(false).build());
+        PlayerActionWalk notFinalizedWalk = new PlayerActionWalk.Builder().withPlayer(player).withCreatedAt(calendar.getTime()).withFromPlace(fromPlace).withToPlace(toPlace).withFinalized(false).build();
         
-        when(playerActionWalkRepository.findAllNotFinalized()).thenReturn(notFinalizedWalk);
+        when(playerActionWalkRepository.get()).thenReturn(notFinalizedWalk);
         indexController.finalizeCompletedActions(player);
-        verify(playerActionWalkRepository).findAllNotFinalized();
+        verify(playerActionWalkRepository).get();
         
         
         class PlayerActionWalkMatcher extends ArgumentMatcher<PlayerActionWalk> {
