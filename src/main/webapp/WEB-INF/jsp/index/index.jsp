@@ -82,6 +82,7 @@
                         }
 
                     </script>
+                    <hr/>
             </c:if>
             
             <c:if test="${playerActionWalkInProgress==null}">
@@ -142,7 +143,7 @@
                 </tbody>
             </table>
             
-            <h4>Estado Fisiológico</h4>
+            
             
             
             <table class="table table-bordered ">
@@ -153,19 +154,11 @@
                 </thead-->
                 <tbody>
                   <tr>
-                    <td>Sede</td>
+                    <td>Vida</td>
                     <td style="width: 100%">
                         <div class="progress">
-                            <div class="bar bar-danger" style="width: ${sm.player.state.thirstyLevel*100}%;"></div>
+                            <div class="bar bar-danger" style="width: ${sm.player.life*100}%;"></div>
                         </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Fome</td>
-                    <td>
-                        <div class="progress">
-                            <div class="bar bar-danger" style="width: ${sm.player.state.hungryLevel*100}%;"></div>
-                        </div>                        
                     </td>
                   </tr>
                 </tbody>

@@ -8,14 +8,12 @@ import javax.persistence.OneToOne;
 public class Player extends Entity {
     private String name;
     private int gold;
+    private double life;
     
     
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerCredentials credentials;
     
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)    
-    private PlayerState state = new PlayerState.Builder().withThirstyLevel(0.95).withHungryLevel(0.55).build();
-
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Place place;
     
@@ -50,6 +48,11 @@ public class Player extends Entity {
             return this;
         }
 
+        public Builder withLife(final double life) {
+            this.item.life = life;
+            return this;
+        }
+
         public Builder withSkills(final PlayerSkills skills) {
             this.item.setSkills(skills);
             return this;
@@ -62,11 +65,6 @@ public class Player extends Entity {
 
         public Builder withPlace(final Place place) {
             this.item.place = place;
-            return this;
-        }
-
-        public Builder withState(final PlayerState state) {
-            this.item.state = state;
             return this;
         }
 
@@ -85,14 +83,6 @@ public class Player extends Entity {
         public Player build() {
             return this.item;
         }
-    }
-
-    public PlayerState getState() {
-        return state;
-    }
-
-    public void setState(PlayerState state) {
-        this.state = state;
     }
 
     public Place getPlace() {
@@ -117,5 +107,13 @@ public class Player extends Entity {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public double getLife() {
+        return life;
+    }
+
+    public void setLife(double life) {
+        this.life = life;
     }
 }
