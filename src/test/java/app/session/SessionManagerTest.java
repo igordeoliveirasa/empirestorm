@@ -39,6 +39,10 @@ public class SessionManagerTest {
         
     @Mock
     private Facebook facebook;
+    @Mock
+    private PlayerRepository playerRepository;
+    
+    
     private SessionManager sessionManager;
     
     @Before
@@ -60,6 +64,22 @@ public class SessionManagerTest {
         
         sessionManager.signOut();
         assertFalse(sessionManager.isSignedIn());
+    }
+    
+    @Test
+    public void getPlayer() {
+        Player player = new Player.Builder().withId(1L).build();
+        sessionManager.signIn(player);
+        when(playerRepository.find(1L)).thenReturn(player);
+        Player returnedPlayer = sessionManager.getPlayer(playerRepository);
+        assertEquals(returnedPlayer.getId(), 1L, 0);
+    }
+        
+    @Test
+    public void getPlayerNull() {
+        when(playerRepository.find(1L)).thenReturn(null);
+        Player returnedPlayer = sessionManager.getPlayer(playerRepository);
+        assertNull(returnedPlayer);
     }
         
     

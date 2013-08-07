@@ -71,19 +71,19 @@ public class PlayerActionWalk extends Entity {
         return f.format(getDistance()) + " kms";
     }    
     
-    public long getDurationInMinutes() {
-        return (long) (this.getDistance() * player.getSkills().getWalkVelocity());
+    public double getDurationInMinutes() {
+        return (this.getDistance() * player.getSkills().getWalkVelocity());
     }
     
     public String getFormattedDuration() {        
-        int totalMinutes = new Double(getDurationInMinutes()).intValue();
+        double totalMinutes = getDurationInMinutes();
         return totalMinutes + " mins";
     }    
     
     public double getProgressValue() { 
         long firstTime = getCreatedAt().getTime();
         long currentTime = new Date().getTime();
-        long endTime = (firstTime + getDurationInMinutes() * 60 * 1000);
+        double endTime = (firstTime + getDurationInMinutes() * 60 * 1000);
         
         double diffTime1 = currentTime - firstTime;
         double diffTime2 = endTime - firstTime;

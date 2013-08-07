@@ -48,7 +48,10 @@ public class SessionManager {
     }
     
     public Player getPlayer(PlayerRepository playerRepository) {
-        this.player = playerRepository.find(player.getId());
-        return getPlayer();
+        if (player!=null) {
+            this.player = playerRepository.find(player.getId());
+            return getPlayer();
+        }
+        return null;
     }
 }

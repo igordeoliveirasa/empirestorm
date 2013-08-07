@@ -50,8 +50,6 @@ public class IndexControllerTest {
     private Validator validator;
     private Result result;
     
-    private Result spyResult;
-    
     @Mock
     private SessionManager sessionManager;
     @Mock
