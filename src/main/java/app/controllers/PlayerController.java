@@ -2,7 +2,6 @@ package app.controllers;
 
 import app.components.PlayerActionFactory;
 import app.models.Place;
-import java.util.List;
 
 import app.models.Player;
 import app.models.PlayerActionWalk;
@@ -10,15 +9,11 @@ import app.repositories.PlaceRepository;
 import app.repositories.PlayerActionWalkRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
-import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.validator.Validations;
-import com.google.common.base.Strings;
 import java.util.Date;
 
 @Resource

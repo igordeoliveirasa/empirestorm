@@ -4,45 +4,30 @@
  */
 package app.components;
 
-import app.controllers.*;
 import app.models.Player;
-import app.models.PlayerCredentials;
 import app.repositories.PlaceRepository;
 import app.repositories.PlaceTypeRepository;
 import app.repositories.PlayerCredentialsRepository;
 import app.repositories.PlayerRepository;
 import app.session.SessionManager;
-import app.components.MessagesProperties;
-import app.components.PlayerActionFactory;
 import app.models.Place;
 import app.models.PlayerActionWalk;
 import app.repositories.PlayerActionWalkRepository;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.util.test.MockResult;
-import br.com.caelum.vraptor.util.test.MockSerializationResult;
-import br.com.caelum.vraptor.util.test.MockValidator;
-import facebook4j.Facebook;
-import facebook4j.FacebookException;
-import facebook4j.User;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 
 /**
  *
  * @author igor
  */
-public class PlayerFactoryTest {
+public class PlayerActionFactoryTest {
     
     private Validator validator;
     private Result result;
@@ -51,10 +36,6 @@ public class PlayerFactoryTest {
     
     @Mock
     private SessionManager sessionManager;
-    @Mock
-    private Facebook facebook;
-    @Mock
-    private User user;
     
     @Mock
     private PlayerCredentialsRepository playerCredentialsRepository;
@@ -79,13 +60,20 @@ public class PlayerFactoryTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        PlayerActionFactory playerActionFactory = new PlayerActionFactory();
+        playerActionFactory = new PlayerActionFactory();
     }
 
     @Test
     public void buildTravelingWalking() {
-        cú!
-        playerActionFactory.buildTravelingWalking(null, null, null);
+        Place fromPlace = new Place.Builder().withId(1L).withName("From Place").withX(0).withY(0).build();
+        Place toPlace = new Place.Builder().withId(3L).withName("To Place").withX(1).withY(1).build();
+        Player player = new Player.Builder().withId(2L).withPlace(fromPlace).build();
+
+        PlayerActionWalk playerActionWalk = playerActionFactory.buildTravelingWalking(player, fromPlace, toPlace);
+        assertEquals(playerActionWalk.getPlayer().getId(), 2L, 0);
+        assertEquals(playerActionWalk.getFromPlace().getId(), 1L, 0);
+        assertEquals(playerActionWalk.getToPlace().getId(), 3L, 0);
+        assertEquals(playerActionWalk.getDistance(), 1.41, 0);
     }
         
 }

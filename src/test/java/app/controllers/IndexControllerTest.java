@@ -15,6 +15,7 @@ import app.components.MessagesProperties;
 import app.components.PlayerActionFactory;
 import app.models.Place;
 import app.models.PlayerActionWalk;
+import app.models.PlayerSkills;
 import app.repositories.PlayerActionWalkRepository;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
@@ -24,15 +25,18 @@ import br.com.caelum.vraptor.util.test.MockValidator;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.User;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -215,10 +219,49 @@ public class IndexControllerTest {
         verify(playerActionWalkRepository).findAllNotFinalized();
     }
     
+    @Test
+    public void finalizeCompletedActions2() {
+        Player player = new Player.Builder().withSkills(new PlayerSkills.Builder().withWalkVelocity(1L).build()).build();
+        List<PlayerActionWalk> notFinalizedWalk = new ArrayList<PlayerActionWalk>();
+        
+        Place fromPlace = new Place.Builder().withId(1L).withName("From Place").withX(0).withY(0).build();
+        Place toPlace = new Place.Builder().withId(3L).withName("To Place").withX(1).withY(1).build();
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        
+        notFinalizedWalk.add(new PlayerActionWalk.Builder().withPlayer(player).withCreatedAt(calendar.getTime()).withFromPlace(fromPlace).withToPlace(toPlace).withFinalized(false).build());
+        
+        when(playerActionWalkRepository.findAllNotFinalized()).thenReturn(notFinalizedWalk);
+        indexController.finalizeCompletedActions(player);
+        verify(playerActionWalkRepository).findAllNotFinalized();
+        
+        
+        class PlayerActionWalkMatcher extends ArgumentMatcher<PlayerActionWalk> {
+
+            @Override
+            public boolean matches(Object argument) {
+                PlayerActionWalk playerActionWalk = (PlayerActionWalk)argument;
+                return playerActionWalk.isFinalized();
+            }
+        }
+        verify(playerActionWalkRepository).update(argThat(new PlayerActionWalkMatcher()));
+        
+        class PlayerMatcher extends ArgumentMatcher<Player> {
+
+            @Override
+            public boolean matches(Object argument) {
+                Player player = (Player)argument;
+                return player.getPlace().getId().compareTo(3L)==0;
+            }
+        }
+        verify(playerRepository).update(argThat(new PlayerMatcher()));
+    }
+    
     
     @Test
     public void getAvailablePlacesToWalk() {
-         Place currentPlace = new Place.Builder().withId(1L).withName("Storm Field").build();
+        Place currentPlace = new Place.Builder().withId(1L).withName("Storm Field").build();
         Player player = new Player.Builder().withId(2L).withPlace(currentPlace).build();
         
         List<Place> places = new ArrayList<Place>();

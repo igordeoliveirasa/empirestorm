@@ -48,6 +48,11 @@ public class Player extends Entity {
             return this;
         }
 
+        public Builder withSkills(final PlayerSkills skills) {
+            this.item.setSkills(skills);
+            return this;
+        }
+
         public Builder withName(final String name) {
             this.item.name = name;
             return this;

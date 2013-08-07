@@ -62,7 +62,8 @@ public class PlayerActionWalk extends Entity {
     public double getDistance() {
         Point pointA = new Point(fromPlace.getX(), fromPlace.getY());
         Point pointB = new Point(toPlace.getX(), toPlace.getY());
-        return pointA.distance(pointB);
+        DecimalFormat f = new DecimalFormat("#,###,##0.00");    
+        return Double.parseDouble(f.format(pointA.distance(pointB)));
     }
     
     public String getFormattedDistance() {
@@ -100,6 +101,11 @@ public class PlayerActionWalk extends Entity {
             this.item = new PlayerActionWalk();
         }
         private PlayerActionWalk item;
+
+        public Builder withCreatedAt(final Date date) {
+            this.item.setCreatedAt(date);
+            return this;
+        }
 
         public Builder withPlayer(final Player player) {
             this.item.player = player;
