@@ -56,7 +56,7 @@
                     <div class="progress progress-striped active">
                         <div id="bar1" class="bar" style="width: ${playerActionWalkInProgress.progressValue*100}%;"></div>
                     </div>
-                    <a href="#" class="btn btn-small btn-danger">Parar</a>
+                    <a href="${linkTo[PlayerController].actionStopWalkTo}" class="btn btn-small btn-danger">Parar</a>
 
                     <script>
 
